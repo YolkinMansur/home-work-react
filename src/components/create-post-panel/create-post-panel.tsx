@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import { useState } from 'react';
+import { IPost } from '../../interfaces/post';
 import AddPostForm from '../add-post-form/add-post-form';
 import PreviewPost from '../preview-post/preview-post';
 
@@ -8,15 +9,15 @@ let btnClassActive =
 let btnClassNoActive =
   'rounded-t-lg mr-2 py-1 px-3 hover:text-mainLight hover:bg-mainNavy/60 bg-mainNavy/50 text-white/50';
 
-type Props = {};
-export default function CreatePostPanel({}: Props) {
+type Props = {setPosts: any};
+export default function CreatePostPanel({setPosts}: Props) {
   const [preview, setPreview] = useState(false);
   const [title, setTitle] = useState<string>('');
   const [text, setText] = useState<string>('')
 
-const onPreview = ({title, postText}: Record<string, string>) => {
+const onPreview = ({title, text}: Record<string, string>) => {
     setTitle(title)
-    setText(postText)
+    setText(text)
 }
 
   return (
@@ -35,9 +36,9 @@ const onPreview = ({title, postText}: Record<string, string>) => {
           Предпросмотр
         </button>
       </div>
-      <div className="bg-mainNavy max-w-full w-[900px] min-w-max mx-auto p-5 rounded-r-lg rounded-b-lg">
+      <div className="bg-mainNavy w-[min(100%,_900px)] mx-auto p-5 rounded-r-lg rounded-b-lg ">
         {preview ? 
-        <PreviewPost title={title}  text={text}/> : <AddPostForm title={title}  text={text} onPreview={onPreview}/> }
+        <PreviewPost title={title}  text={text}/> : <AddPostForm title={title}  text={text} onPreview={onPreview} setPosts={setPosts}/> }
       </div>
     </div>
   );

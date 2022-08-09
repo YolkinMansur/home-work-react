@@ -1,35 +1,50 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { addPost, fetchPosts } from '../../data/posts';
+import { IPost } from '../../interfaces/post';
 
-type Props = {title: string, text: string, onPreview: ({title, postText}: Record<string, string>) => void};
-type FormData = {
+type Props = {
   title: string;
-  postText: string;
+  text: string;
+  onPreview: ({ title, text }: Record<string, string>) => void;
+  setPosts: any;
+};
+export type FormData = {
+  title: string;
+  text: string;
   date: string;
 };
 
-export default function AddPostForm({title, text, onPreview}: Props) {
+export default function AddPostForm({
+  title,
+  text,
+  onPreview,
+  setPosts,
+}: Props) {
   const {
     register,
     handleSubmit,
     formState: { errors },
     getValues,
     setValue,
-  } = useForm<FormData>({mode: "onBlur"});
+    reset,
+  } = useForm<FormData>({ mode: 'onBlur' });
 
   const onSubmit = (data: FormData) => {
-    console.log(data);
+    addPost({ ...data, id: 0 })
+    setPosts([...fetchPosts()]);
+    reset();
   };
 
   useEffect(() => {
     return () => {
-      const values = getValues()
-      onPreview(values)
-    }
-  }, [])
+      const values = getValues();
+      onPreview(values);
+    };
+  }, []);
 
   return (
-    <form className="flex flex-col">
+    <form className="flex flex-col ">
       <h2 className="text-xl font-semibold mb-2">Создайте новый пост</h2>
       <input
         placeholder="Название поста..."
@@ -52,15 +67,15 @@ export default function AddPostForm({title, text, onPreview}: Props) {
         className="bg-mainDark focus:outline-none focus:ring mt-4 focus:ring-mainLight py-2 px-4 "
         id="postText"
         defaultValue={text}
-        {...register('postText', {
+        {...register('text', {
           required: 'Поле обязательно к заполнению',
           minLength: { value: 20, message: 'Минимум 20 символов' },
-          onBlur: ({target : {value}}) => setValue('postText', value.trim()),
+          onBlur: ({ target: { value } }) => setValue('text', value.trim()),
         })}
-        rows="10"
+        rows={8}
       ></textarea>
-      {errors.postText && (
-        <small className="py-1 px-2 text-red-400">{errors.postText.message}</small>
+      {errors.text && (
+        <small className="py-1 px-2 text-red-400">{errors.text.message}</small>
       )}
       <div className="flex items-center mt-4">
         <label htmlFor="date" className="text-base mr-2 font-semibold">
@@ -70,13 +85,15 @@ export default function AddPostForm({title, text, onPreview}: Props) {
           type="date"
           id="date"
           {...register('date', {
-            required: 'Выберите дату'
+            required: 'Выберите дату',
           })}
           className="bg-mainDark focus:outline-none focus:ring-2 rounded-sm focus:ring-mainLight px-1"
         />
-         {errors.date && (
-        <small className="py-1 px-2 text-red-400">{errors.date.message}</small>
-      )}
+        {errors.date && (
+          <small className="py-1 px-2 text-red-400">
+            {errors.date.message}
+          </small>
+        )}
         <div className="ml-auto">
           <button
             className=" py-1 px-3 bg-mainTeal rounded-md hover:bg-mainTeal/50"
