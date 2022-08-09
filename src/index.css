@@ -8,7 +8,11 @@
 
 :root {
   font-family: 'Manrope', sans-serif;
-  background-color: #242424;
 
+}
+
+body {
+  background-color: #2C3639;
+  color: white;
 }
 
