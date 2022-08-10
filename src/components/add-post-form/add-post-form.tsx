@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { addPost, fetchPosts } from '../../data/posts';
-import { IPost } from '../../interfaces/post';
 
 type Props = {
   title: string;

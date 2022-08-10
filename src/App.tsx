@@ -16,7 +16,7 @@ function App() {
   return (
     <div className="container mx-auto py-10">
       <CreatePostPanel setPosts={updatePosts} />
-      <PostItemList posts={postsState} />
+      <PostItemList posts={postsState} setPosts={updatePosts} />
     </div>
   );
 }
