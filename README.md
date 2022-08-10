@@ -12,6 +12,6 @@ cd home-work-react
 ```js
 git checkout origin/hw1 // выполнена
 git checkout origin/hw2 // выполнена
-git checkout origin/hw3 // в процессе 
+git checkout origin/hw3-4 // выполнена
 ...
 ```
